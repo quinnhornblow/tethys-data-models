@@ -5,6 +5,7 @@ Created on Tue Sep 21 16:40:08 2021
 
 @author: mike
 """
+
 from typing import Literal, Union
 
 from pydantic import BaseModel, conlist
@@ -15,7 +16,7 @@ from pydantic import BaseModel, conlist
 ### Classes
 
 lat_lon = Union[
-    conlist(float, min_items=2, max_items=3), conlist(int, min_items=2, max_items=3)
+    conlist(float, min_length=2, max_length=3), conlist(int, min_length=2, max_length=3)
 ]
 
 
@@ -34,7 +35,7 @@ class LineString(BaseModel):
     """
 
     type: Literal["LineString"]
-    coordinates: conlist(lat_lon, min_items=1)
+    coordinates: list[lat_lon]
 
 
 class MultiPoint(BaseModel):
@@ -43,7 +44,7 @@ class MultiPoint(BaseModel):
     """
 
     type: Literal["MultiPoint"]
-    coordinates: conlist(lat_lon, min_items=1)
+    coordinates: list[lat_lon]
 
 
 class MultiLineString(BaseModel):
@@ -52,7 +53,7 @@ class MultiLineString(BaseModel):
     """
 
     type: Literal["MultiLineString"]
-    coordinates: conlist(conlist(lat_lon, min_items=1), min_items=1)
+    coordinates: list[list[lat_lon]]
 
 
 class Polygon(BaseModel):
@@ -61,7 +62,7 @@ class Polygon(BaseModel):
     """
 
     type: Literal["Polygon"]
-    coordinates: conlist(conlist(lat_lon, min_items=1), min_items=1)
+    coordinates: list[list[lat_lon]]
 
 
 class MultiPolygon(BaseModel):
@@ -70,9 +71,7 @@ class MultiPolygon(BaseModel):
     """
 
     type: Literal["MultiPolygon"]
-    coordinates: conlist(
-        conlist(conlist(lat_lon, min_items=1), min_items=1), min_items=1
-    )
+    coordinates: list[list[list[lat_lon]]]
 
 
 geometry = Union[Point, LineString, Polygon, MultiLineString, MultiPoint, MultiPolygon]
